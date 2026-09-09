@@ -1,24 +1,125 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { Page, PageHeader } from "@/components/AppShell";
+import { MapPanel } from "@/components/MapPanel";
+import { Panel, StatCard } from "@/components/StatCard";
+import { accidents } from "@/data/accidents";
+import { byYearSeries, summary } from "@/lib/accident-analytics";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Dashboard — Road Accident Hotspot Analysis" },
+      {
+        name: "description",
+        content:
+          "Overview of road accident statistics, yearly trends and accident hotspot locations.",
+      },
+      { property: "og:title", content: "Dashboard — Road Accident Hotspot Analysis" },
+      {
+        property: "og:description",
+        content: "Road accident statistics, yearly trends and hotspot locations.",
+      },
+    ],
+  }),
+  component: Dashboard,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Dashboard() {
+  const stats = summary(accidents);
+  const trend = byYearSeries(accidents);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <Page>
+      <PageHeader
+        title="Dashboard"
+        description="Overview of the full accident dataset across all years and locations."
       />
-    </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Total accidents"
+          value={stats.total}
+          detail={`${stats.fatal} recorded as fatal`}
+        />
+        <StatCard
+          label="High-risk locations"
+          value={stats.highRisk}
+          detail="Areas with dense accident clusters"
+        />
+        <StatCard
+          label="Most common type"
+          value={stats.commonType}
+          detail={`${stats.commonTypeCount} cases`}
+        />
+        <StatCard
+          label="Most affected year"
+          value={stats.worstYear}
+          detail={`${stats.worstYearCount} accidents`}
+        />
+      </div>
+
+      <div className="mt-8 space-y-8">
+        <Panel title="Accident trend by year" description="Total recorded accidents per year">
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={trend} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
+                <CartesianGrid stroke="var(--color-border)" vertical={false} />
+                <XAxis
+                  dataKey="year"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid var(--color-border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  name="Accidents"
+                  stroke="var(--color-chart-1)"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Panel>
+
+        <Panel
+          title="Hotspot map preview"
+          description="Accident locations and concentration areas"
+          action={
+            <Link to="/map" className="text-primary text-xs font-medium hover:underline">
+              Open full map →
+            </Link>
+          }
+        >
+          <div className="overflow-hidden rounded-md">
+            <MapPanel records={accidents} height="340px" interactive={false} zoom={10} />
+          </div>
+        </Panel>
+      </div>
+    </Page>
   );
 }
