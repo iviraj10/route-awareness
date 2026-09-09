@@ -38,6 +38,8 @@ export const Route = createFileRoute("/analysis")({
         property: "og:description",
         content: "Accident patterns by year, type, road and severity.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AnalysisPage,
@@ -81,11 +83,11 @@ function AnalysisPage() {
           filtered.length === 1 ? "" : "s"
         } matching the current filters.`}
       />
-      <div className="space-y-6">
+      <div className="space-y-5">
         <FilterBar />
 
         <Panel title="Accidents by year" description={describe(filters)}>
-          <div className="h-64">
+          <div className="h-60">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -109,8 +111,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by accident type">
-          <div className="h-72">
+        <Panel title="Accidents by accident type" description="Frequency of each collision category">
+          <div className="h-68">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -137,8 +139,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by location / road" description="Top locations in the selection">
-          <div className="h-80">
+        <Panel title="Accidents by location / road" description="Highest-frequency roads in the current selection">
+          <div className="h-76">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -165,8 +167,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by severity">
-          <div className="h-64">
+        <Panel title="Accidents by severity" description="Fatal, serious and minor records compared">
+          <div className="h-60">
             {isEmpty ? (
               <EmptyState />
             ) : (

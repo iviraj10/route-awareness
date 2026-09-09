@@ -132,7 +132,7 @@ function Dashboard() {
             </Link>
           }
         >
-          <MapPanel records={filtered} height="320px" interactive={false} zoom={10} />
+          <MapPanel records={filtered} height="320px" interactive={false} zoom={10} embedded />
         </Panel>
       </div>
     </Page>

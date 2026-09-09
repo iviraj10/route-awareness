@@ -2,6 +2,7 @@ import { ClientOnly } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import type { AccidentRecord } from "@/data/accidents";
 import { severityColor } from "@/lib/accident-analytics";
+import { cn } from "@/lib/utils";
 
 const AccidentMap = lazy(() => import("@/components/AccidentMap"));
 
@@ -10,6 +11,7 @@ interface Props {
   height?: string;
   interactive?: boolean;
   zoom?: number;
+  embedded?: boolean;
 }
 
 function Placeholder({ height }: { height: string }) {
@@ -23,9 +25,20 @@ function Placeholder({ height }: { height: string }) {
   );
 }
 
-export function MapPanel({ records, height = "520px", interactive = true, zoom = 11 }: Props) {
+export function MapPanel({
+  records,
+  height = "520px",
+  interactive = true,
+  zoom = 11,
+  embedded = false,
+}: Props) {
   return (
-    <div className="border-border bg-surface shadow-card overflow-hidden rounded-lg border">
+    <div
+      className={cn(
+        "bg-surface overflow-hidden rounded-lg",
+        embedded ? "-m-4 sm:-m-5 sm:mt-0" : "border-border shadow-card border",
+      )}
+    >
       <ClientOnly fallback={<Placeholder height={height} />}>
         <Suspense fallback={<Placeholder height={height} />}>
           <AccidentMap
