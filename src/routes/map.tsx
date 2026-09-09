@@ -37,7 +37,7 @@ function MapPage() {
       <div className="space-y-6">
         <FilterBar />
         <MapPanel records={filtered} height="560px" />
-        {spots.length > 0 ? (
+        {spots.length > 0 && spots[0] ? (
           <p className="text-muted-foreground text-sm">
             {spots.length} high-risk area{spots.length > 1 ? "s" : ""} in the current selection —
             densest near <span className="text-foreground font-medium">{spots[0].location}</span>{" "}
