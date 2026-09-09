@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen md:flex">
       <aside className="border-border bg-surface shrink-0 border-b md:h-screen md:w-60 md:border-r md:border-b-0">
         <div className="md:sticky md:top-0">
-          <div className="flex items-center gap-2.5 px-5 py-5">
+          <div className="flex items-center gap-2.5 px-5 py-4.5">
             <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-md">
               <TriangleAlert className="size-4" />
             </span>
@@ -55,10 +55,10 @@ export function PageHeader({
   children?: ReactNode;
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-4 pb-8">
+    <header className="flex flex-wrap items-end justify-between gap-4 pb-6">
       <div>
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">{description}</p>
+        <h1 className="text-2xl font-semibold leading-tight">{title}</h1>
+        <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm leading-relaxed">{description}</p>
       </div>
       {children}
     </header>
@@ -66,5 +66,5 @@ export function PageHeader({
 }
 
 export function Page({ children }: { children: ReactNode }) {
-  return <div className="mx-auto max-w-6xl px-6 py-8 md:px-10 md:py-10">{children}</div>;
+  return <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:px-8 md:py-8">{children}</div>;
 }

@@ -36,21 +36,22 @@ export function MapPanel({ records, height = "520px", interactive = true, zoom =
           />
         </Suspense>
       </ClientOnly>
-      <div className="border-border text-muted-foreground flex flex-wrap items-center gap-4 border-t px-4 py-3 text-xs">
+      <div className="border-border text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2 border-t px-4 py-3 text-xs">
+        <span className="text-foreground font-medium">Legend</span>
         {(["Fatal", "Serious", "Minor"] as const).map((s) => (
-          <span key={s} className="flex items-center gap-1.5">
+          <span key={s} className="flex items-center gap-1.5" title={`${s} accident marker`}>
             <span
-              className="size-2.5 rounded-full"
+              className="size-2.5 rounded-full ring-1 ring-foreground/15"
               style={{ backgroundColor: severityColor[s] }}
             />
-            {s}
+            {s} marker
           </span>
         ))}
         <span className="flex items-center gap-1.5">
-          <span className="size-2.5 rounded-full bg-fatal/25" />
-          Shaded area = accident concentration
+          <span className="size-3 rounded-full bg-fatal/20 ring-1 ring-fatal/35" />
+          Hotspot concentration
         </span>
-        <span className="ml-auto font-mono">{records.length} accidents shown</span>
+        <span className="text-foreground ml-auto font-mono font-medium">{records.length} accidents shown</span>
       </div>
     </div>
   );
