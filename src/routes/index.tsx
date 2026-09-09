@@ -9,10 +9,11 @@ import {
   YAxis,
 } from "recharts";
 import { Page, PageHeader } from "@/components/AppShell";
+import { FilterBar } from "@/components/FilterBar";
 import { MapPanel } from "@/components/MapPanel";
 import { Panel, StatCard } from "@/components/StatCard";
-import { accidents } from "@/data/accidents";
 import { byYearSeries, summary } from "@/lib/accident-analytics";
+import { useFilters } from "@/lib/filter-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,23 +29,29 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Road accident statistics, yearly trends and hotspot locations.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Dashboard,
 });
 
 function Dashboard() {
-  const stats = summary(accidents);
-  const trend = byYearSeries(accidents);
+  const { filtered } = useFilters();
+  const stats = summary(filtered);
+  const trend = byYearSeries(filtered);
 
   return (
     <Page>
       <PageHeader
         title="Dashboard"
-        description="Overview of the full accident dataset across all years and locations."
+        description="A focused overview of accident frequency, severity and location patterns."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="space-y-5">
+        <FilterBar />
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Total accidents"
           value={stats.total}
@@ -65,11 +72,20 @@ function Dashboard() {
           value={stats.worstYear}
           detail={`${stats.worstYearCount} accidents`}
         />
+        </div>
       </div>
 
-      <div className="mt-8 space-y-8">
-        <Panel title="Accident trend by year" description="Total recorded accidents per year">
-          <div className="h-64">
+      <div className="mt-6 space-y-6">
+        <Panel
+          title="Accident trend by year"
+          description={`${filtered.length} matching record${filtered.length === 1 ? "" : "s"} across the selected years`}
+        >
+          <div className="h-56 sm:h-60">
+            {filtered.length === 0 ? (
+              <p className="text-muted-foreground flex h-full items-center justify-center text-sm">
+                No accidents match the current filters.
+              </p>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trend} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
                 <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -103,6 +119,7 @@ function Dashboard() {
                 />
               </LineChart>
             </ResponsiveContainer>
+            )}
           </div>
         </Panel>
 
@@ -115,9 +132,7 @@ function Dashboard() {
             </Link>
           }
         >
-          <div className="overflow-hidden rounded-md">
-            <MapPanel records={accidents} height="340px" interactive={false} zoom={10} />
-          </div>
+          <MapPanel records={filtered} height="320px" interactive={false} zoom={10} embedded />
         </Panel>
       </div>
     </Page>

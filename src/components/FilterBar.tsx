@@ -1,5 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 import { ALL, activeFilterCount, filterOptions, type Filters } from "@/lib/accident-analytics";
 import { useFilters } from "@/lib/filter-context";
 
@@ -44,8 +45,20 @@ export function FilterBar() {
   const set = (k: keyof Filters) => (v: string) => setFilter(k, v);
 
   return (
-    <div className="border-border bg-surface shadow-card rounded-lg border p-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+    <section className="border-border bg-surface shadow-card rounded-lg border px-4 py-3.5" aria-label="Accident data filters">
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-sm font-semibold">Filter accident data</h2>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            {count === 0 ? "Showing the complete dataset" : `${count} active filter${count === 1 ? "" : "s"} applied across this view`}
+          </p>
+        </div>
+        <Button variant="ghost" size="sm" onClick={reset} disabled={count === 0} className="shrink-0">
+          <RotateCcw className="size-3.5" />
+          Reset filters
+        </Button>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Field
           label="Year"
           value={filters.year}
@@ -74,10 +87,7 @@ export function FilterBar() {
           allLabel="All severities"
           options={filterOptions.severities}
         />
-        <Button variant="ghost" onClick={reset} disabled={count === 0} className="sm:mb-0.5">
-          Reset
-        </Button>
       </div>
-    </div>
+    </section>
   );
 }

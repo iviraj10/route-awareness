@@ -19,6 +19,8 @@ export const Route = createFileRoute("/map")({
         property: "og:description",
         content: "Filterable map of accident locations and hotspot areas.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: MapPage,
@@ -32,11 +34,11 @@ function MapPage() {
     <Page>
       <PageHeader
         title="Accident Map"
-        description="Filter the dataset and click any marker to see the accident details."
+        description="Apply filters to update every visible marker and hotspot, then select a marker for details."
       />
-      <div className="space-y-6">
+      <div className="space-y-5">
         <FilterBar />
-        <MapPanel records={filtered} height="560px" />
+        <MapPanel records={filtered} height="540px" />
         {spots.length > 0 && spots[0] ? (
           <p className="text-muted-foreground text-sm">
             {spots.length} high-risk area{spots.length > 1 ? "s" : ""} in the current selection —

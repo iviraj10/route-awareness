@@ -10,12 +10,12 @@ export function StatCard({
   detail?: string;
 }) {
   return (
-    <div className="border-border bg-surface shadow-card rounded-lg border p-5">
+    <div className="border-border bg-surface shadow-card min-h-28 rounded-lg border border-t-2 border-t-primary/45 p-4">
       <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">{label}</p>
-      <p className="mt-2 truncate font-mono text-2xl font-semibold" title={String(value)}>
+      <p className="mt-2 truncate font-mono text-2xl font-semibold leading-none" title={String(value)}>
         {value}
       </p>
-      {detail ? <p className="text-muted-foreground mt-1 text-xs">{detail}</p> : null}
+      {detail ? <p className="text-muted-foreground mt-2 text-xs leading-relaxed">{detail}</p> : null}
     </div>
   );
 }
@@ -33,16 +33,16 @@ export function Panel({
 }) {
   return (
     <section className="border-border bg-surface shadow-card rounded-lg border">
-      <div className="border-border flex items-start justify-between gap-4 border-b px-5 py-4">
+      <div className="border-border flex items-start justify-between gap-4 border-b px-5 py-3.5">
         <div>
-          <h2 className="text-sm font-semibold">{title}</h2>
+          <h2 className="text-[0.9375rem] font-semibold">{title}</h2>
           {description ? (
             <p className="text-muted-foreground mt-0.5 text-xs">{description}</p>
           ) : null}
         </div>
         {action}
       </div>
-      <div className="p-5">{children}</div>
+      <div className="p-4 sm:p-5">{children}</div>
     </section>
   );
 }
