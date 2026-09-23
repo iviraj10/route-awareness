@@ -88,7 +88,7 @@ function AnalysisPage() {
 
         <Panel title="Accidents by year" description={describe(filters)}>
           <div className="h-60">
-            {isEmpty ? (
+            {filteredIgnoringYear.length === 0 ? (
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
