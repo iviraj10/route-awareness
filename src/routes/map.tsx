@@ -3,7 +3,7 @@ import { FilterBar } from "@/components/FilterBar";
 import { Page, PageHeader } from "@/components/AppShell";
 import { MapPanel } from "@/components/MapPanel";
 import { useFilters } from "@/lib/filter-context";
-import { HIGH_RISK_THRESHOLD, hotspots } from "@/lib/accident-analytics";
+import { highRiskLocations } from "@/lib/accident-analytics";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/map")({
 
 function MapPage() {
   const { filtered } = useFilters();
-  const spots = hotspots(filtered).filter((s) => s.count >= HIGH_RISK_THRESHOLD);
+  const spots = highRiskLocations(filtered);
 
   return (
     <Page>

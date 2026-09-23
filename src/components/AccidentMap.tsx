@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import { CircleMarker, MapContainer, Popup, TileLayer, Circle } from "react-leaflet";
 import { CITY_CENTER, type AccidentRecord } from "@/data/accidents";
-import { HIGH_RISK_THRESHOLD, hotspots, severityColor } from "@/lib/accident-analytics";
+import { HOTSPOT_MIN_COUNT, hotspots, severityColor } from "@/lib/accident-analytics";
 
 interface Props {
   records: AccidentRecord[];
@@ -19,7 +19,7 @@ export default function AccidentMap({
   zoom = 11,
 }: Props) {
   const spots = showHotspots
-    ? hotspots(records).filter((s) => s.count >= HIGH_RISK_THRESHOLD)
+    ? hotspots(records).filter((s) => s.count >= HOTSPOT_MIN_COUNT)
     : [];
 
   return (
