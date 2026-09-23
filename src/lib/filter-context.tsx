@@ -1,12 +1,14 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { accidents } from "@/data/accidents";
-import { applyFilters, emptyFilters, type Filters } from "@/lib/accident-analytics";
+import { ALL, applyFilters, emptyFilters, type Filters } from "@/lib/accident-analytics";
 
 interface FilterContextValue {
   filters: Filters;
   setFilter: (key: keyof Filters, value: string) => void;
   reset: () => void;
   filtered: ReturnType<typeof applyFilters>;
+  /** All filters except Year — used by the year-wise trend chart. */
+  filteredIgnoringYear: ReturnType<typeof applyFilters>;
 }
 
 const FilterContext = createContext<FilterContextValue | null>(null);
@@ -20,6 +22,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       setFilter: (key, v) => setFilters((prev) => ({ ...prev, [key]: v })),
       reset: () => setFilters(emptyFilters),
       filtered: applyFilters(accidents, filters),
+      filteredIgnoringYear: applyFilters(accidents, { ...filters, year: ALL }),
     }),
     [filters],
   );

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Page, PageHeader } from "@/components/AppShell";
 import { Panel } from "@/components/StatCard";
 import { accidents } from "@/data/accidents";
-import { HIGH_RISK_THRESHOLD, hotspots } from "@/lib/accident-analytics";
+import { highRiskLocations } from "@/lib/accident-analytics";
 
 export const Route = createFileRoute("/safety")({
   head: () => ({
@@ -42,9 +42,7 @@ const recommendations = [
 ];
 
 function SafetyPage() {
-  const topSpots = hotspots(accidents)
-    .filter((s) => s.count >= HIGH_RISK_THRESHOLD)
-    .slice(0, 5);
+  const topSpots = highRiskLocations(accidents).slice(0, 5);
 
   return (
     <Page>

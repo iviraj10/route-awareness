@@ -67,10 +67,10 @@ function EmptyState() {
 }
 
 function AnalysisPage() {
-  const { filtered, filters } = useFilters();
+  const { filtered, filteredIgnoringYear, filters } = useFilters();
   const isEmpty = filtered.length === 0;
 
-  const yearData = byYearSeries(filtered);
+  const yearData = byYearSeries(filteredIgnoringYear);
   const typeData = bySeries(filtered, (a) => a.accidentType);
   const roadData = bySeries(filtered, roadKey, 8);
   const severityData = bySeries(filtered, (a) => a.severity);
@@ -88,7 +88,7 @@ function AnalysisPage() {
 
         <Panel title="Accidents by year" description={describe(filters)}>
           <div className="h-60">
-            {isEmpty ? (
+            {filteredIgnoringYear.length === 0 ? (
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">

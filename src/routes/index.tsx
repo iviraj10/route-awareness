@@ -37,9 +37,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Dashboard() {
-  const { filtered } = useFilters();
+  const { filtered, filteredIgnoringYear, filters } = useFilters();
   const stats = summary(filtered);
-  const trend = byYearSeries(filtered);
+  const trend = byYearSeries(filteredIgnoringYear);
 
   return (
     <Page>
@@ -78,14 +78,13 @@ function Dashboard() {
       <div className="mt-6 space-y-6">
         <Panel
           title="Accident trend by year"
-          description={`${filtered.length} matching record${filtered.length === 1 ? "" : "s"} across the selected years`}
+          description={
+            filters.year === "all"
+              ? "Accidents per year, 2019–2026"
+              : `Accidents per year, 2019–2026 — ${filters.year} highlighted`
+          }
         >
           <div className="h-56 sm:h-60">
-            {filtered.length === 0 ? (
-              <p className="text-muted-foreground flex h-full items-center justify-center text-sm">
-                No accidents match the current filters.
-              </p>
-            ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trend} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
                 <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -101,6 +100,7 @@ function Dashboard() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  allowDecimals={false}
                 />
                 <Tooltip
                   contentStyle={{
@@ -115,11 +115,24 @@ function Dashboard() {
                   name="Accidents"
                   stroke="var(--color-chart-1)"
                   strokeWidth={2}
-                  dot={{ r: 3 }}
+                  dot={(props) => {
+                    const { cx, cy, payload, index } = props;
+                    const active = payload.year === filters.year;
+                    return (
+                      <circle
+                        key={index}
+                        cx={cx}
+                        cy={cy}
+                        r={active ? 6 : 3}
+                        fill={active ? "var(--color-chart-1)" : "var(--color-surface)"}
+                        stroke="var(--color-chart-1)"
+                        strokeWidth={2}
+                      />
+                    );
+                  }}
                 />
               </LineChart>
             </ResponsiveContainer>
-            )}
           </div>
         </Panel>
 

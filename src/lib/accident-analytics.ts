@@ -1,4 +1,9 @@
-import { accidents, type AccidentRecord, type Severity } from "@/data/accidents";
+import {
+  accidents,
+  DATASET_YEARS,
+  type AccidentRecord,
+  type Severity,
+} from "@/data/accidents";
 
 export interface Filters {
   year: string;
@@ -78,15 +83,27 @@ export function hotspots(records: AccidentRecord[], precision = 2) {
   return [...groups.values()].sort((a, b) => b.count - a.count);
 }
 
+/** Minimum accidents in a map grid cell before it is drawn as a hotspot area. */
+export const HOTSPOT_MIN_COUNT = 4;
+
+/** A location counts as high-risk once it reaches this many accident records. */
 export const HIGH_RISK_THRESHOLD = 8;
+
+/** Locations (with their accident count) that meet the high-risk threshold. */
+export function highRiskLocations(records: AccidentRecord[]) {
+  const map = countBy(records, (a) => a.location);
+  return [...map.entries()]
+    .filter(([, count]) => count >= HIGH_RISK_THRESHOLD)
+    .sort((a, b) => b[1] - a[1])
+    .map(([location, count]) => ({ location, count }));
+}
 
 export function summary(records: AccidentRecord[]) {
   const byType = countBy(records, (a) => a.accidentType);
   const byYear = countBy(records, (a) => a.year);
-  const spots = hotspots(records);
   return {
     total: records.length,
-    highRisk: spots.filter((s) => s.count >= HIGH_RISK_THRESHOLD).length,
+    highRisk: highRiskLocations(records).length,
     commonType: topEntry(byType)?.[0] ?? "—",
     commonTypeCount: topEntry(byType)?.[1] ?? 0,
     worstYear: topEntry(byYear)?.[0] ?? "—",
@@ -95,11 +112,13 @@ export function summary(records: AccidentRecord[]) {
   };
 }
 
+/** One point per dataset year (2019-2026), so the trend never collapses. */
 export function byYearSeries(records: AccidentRecord[]) {
   const map = countBy(records, (a) => a.year);
-  return [...map.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([year, count]) => ({ year: String(year), count }));
+  return DATASET_YEARS.map((year) => ({
+    year: String(year),
+    count: map.get(year) ?? 0,
+  }));
 }
 
 export function bySeries(
