@@ -79,13 +79,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Road Accident Hotspot Analysis" },
+      { title: "RoadSense — Road Accident Hotspot Analysis" },
       {
         name: "description",
         content:
           "Analyse road accident data, identify accident-prone locations and explore accident patterns on an interactive map.",
       },
-      { property: "og:title", content: "Road Accident Hotspot Analysis" },
+      { property: "og:title", content: "RoadSense — Road Accident Hotspot Analysis" },
       {
         property: "og:description",
         content: "Interactive maps, filters and charts for road accident hotspot analysis.",

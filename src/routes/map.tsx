@@ -8,13 +8,13 @@ import { highRiskLocations } from "@/lib/accident-analytics";
 export const Route = createFileRoute("/map")({
   head: () => ({
     meta: [
-      { title: "Accident Map — Road Accident Hotspot Analysis" },
+      { title: "Mumbai Accident Hotspot Map — RoadSense" },
       {
         name: "description",
         content:
           "Interactive OpenStreetMap view of accident locations with filters for year, road, type and severity.",
       },
-      { property: "og:title", content: "Accident Map — Road Accident Hotspot Analysis" },
+      { property: "og:title", content: "Mumbai Accident Hotspot Map — RoadSense" },
       {
         property: "og:description",
         content: "Filterable map of accident locations and hotspot areas.",
@@ -33,12 +33,12 @@ function MapPage() {
   return (
     <Page>
       <PageHeader
-        title="Accident Map"
-        description="Apply filters to update every visible marker and hotspot, then select a marker for details."
+        title="Mumbai Accident Hotspots"
+        description="Filter Mumbai records to identify high-concentration areas, then select any marker for accident details."
       />
       <div className="space-y-5">
         <FilterBar />
-        <MapPanel records={filtered} height="540px" />
+        <MapPanel records={filtered} height="min(62vh, 620px)" zoom={11} />
         {spots.length > 0 && spots[0] ? (
           <p className="text-muted-foreground text-sm">
             {spots.length} high-risk area{spots.length > 1 ? "s" : ""} in the current selection —

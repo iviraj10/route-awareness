@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   CartesianGrid,
   Line,
@@ -10,7 +10,6 @@ import {
 } from "recharts";
 import { Page, PageHeader } from "@/components/AppShell";
 import { FilterBar } from "@/components/FilterBar";
-import { MapPanel } from "@/components/MapPanel";
 import { Panel, StatCard } from "@/components/StatCard";
 import { byYearSeries, summary } from "@/lib/accident-analytics";
 import { useFilters } from "@/lib/filter-context";
@@ -18,13 +17,13 @@ import { useFilters } from "@/lib/filter-context";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Road Accident Hotspot Analysis" },
+      { title: "Accident Patterns Dashboard — RoadSense" },
       {
         name: "description",
         content:
           "Overview of road accident statistics, yearly trends and accident hotspot locations.",
       },
-      { property: "og:title", content: "Dashboard — Road Accident Hotspot Analysis" },
+      { property: "og:title", content: "Accident Patterns Dashboard — RoadSense" },
       {
         property: "og:description",
         content: "Road accident statistics, yearly trends and hotspot locations.",
@@ -44,8 +43,8 @@ function Dashboard() {
   return (
     <Page>
       <PageHeader
-        title="Dashboard"
-        description="A focused overview of accident frequency, severity and location patterns."
+        title="Mumbai Accident Patterns"
+        description="See where accidents are concentrated, how frequently they occur, and which patterns emerge across the recorded data."
       />
 
       <div className="space-y-5">
@@ -55,36 +54,36 @@ function Dashboard() {
         <StatCard
           label="Total accidents"
           value={stats.total}
-          detail={`${stats.fatal} recorded as fatal`}
+          detail="Records in selected dataset"
         />
         <StatCard
           label="High-risk locations"
           value={stats.highRisk}
-          detail="Areas with dense accident clusters"
+          detail="Locations meeting hotspot threshold"
         />
         <StatCard
           label="Most common type"
           value={stats.commonType}
-          detail={`${stats.commonTypeCount} cases`}
+          detail={`${stats.commonTypeCount} records · most frequent category`}
         />
         <StatCard
           label="Most affected year"
           value={stats.worstYear}
-          detail={`${stats.worstYearCount} accidents`}
+          detail={`${stats.worstYearCount} records · highest count`}
         />
         </div>
       </div>
 
-      <div className="mt-6 space-y-6">
+      <div className="mt-5">
         <Panel
-          title="Accident trend by year"
+          title="Accident Trend, 2019–2026"
           description={
             filters.year === "all"
-              ? "Accidents per year, 2019–2026"
-              : `Accidents per year, 2019–2026 — ${filters.year} highlighted`
+              ? "Compare annual accident frequency across the complete eight-year dataset"
+              : `All eight years remain visible for comparison · ${filters.year} highlighted`
           }
         >
-          <div className="h-56 sm:h-60">
+          <div className="h-64 sm:h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trend} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
                 <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -94,6 +93,7 @@ function Dashboard() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  label={{ value: "Year", position: "insideBottom", offset: -2 }}
                 />
                 <YAxis
                   stroke="var(--color-muted-foreground)"
@@ -101,6 +101,7 @@ function Dashboard() {
                   tickLine={false}
                   axisLine={false}
                   allowDecimals={false}
+                  label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 18 }}
                 />
                 <Tooltip
                   contentStyle={{
@@ -134,18 +135,6 @@ function Dashboard() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </Panel>
-
-        <Panel
-          title="Hotspot map preview"
-          description="Accident locations and concentration areas"
-          action={
-            <Link to="/map" className="text-primary text-xs font-medium hover:underline">
-              Open full map →
-            </Link>
-          }
-        >
-          <MapPanel records={filtered} height="320px" interactive={false} zoom={10} embedded />
         </Panel>
       </div>
     </Page>

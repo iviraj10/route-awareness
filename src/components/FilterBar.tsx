@@ -45,12 +45,12 @@ export function FilterBar() {
   const set = (k: keyof Filters) => (v: string) => setFilter(k, v);
 
   return (
-    <section className="border-border bg-surface shadow-card rounded-lg border px-4 py-3.5" aria-label="Accident data filters">
+    <section className="border-border bg-surface shadow-card rounded-lg border px-4 py-4" aria-label="Accident data filters">
       <div className="mb-3 flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-sm font-semibold">Filter accident data</h2>
+          <h2 className="text-sm font-semibold">Explore accident patterns</h2>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            {count === 0 ? "Showing the complete dataset" : `${count} active filter${count === 1 ? "" : "s"} applied across this view`}
+            {count === 0 ? "Showing all Mumbai accident records" : `${count} active filter${count === 1 ? "" : "s"} applied across this view`}
           </p>
         </div>
         <Button variant="ghost" size="sm" onClick={reset} disabled={count === 0} className="shrink-0">
