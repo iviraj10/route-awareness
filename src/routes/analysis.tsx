@@ -27,13 +27,13 @@ import type { Severity } from "@/data/accidents";
 export const Route = createFileRoute("/analysis")({
   head: () => ({
     meta: [
-      { title: "Analysis — Road Accident Hotspot Analysis" },
+      { title: "Accident Pattern Analysis — RoadSense" },
       {
         name: "description",
         content:
           "Charts of accidents by year, accident type, road location and severity, updated by the active filters.",
       },
-      { property: "og:title", content: "Analysis — Road Accident Hotspot Analysis" },
+      { property: "og:title", content: "Accident Pattern Analysis — RoadSense" },
       {
         property: "og:description",
         content: "Accident patterns by year, type, road and severity.",
@@ -56,6 +56,7 @@ const tooltipStyle = {
   borderRadius: 8,
   border: "1px solid var(--color-border)",
   fontSize: 12,
+  boxShadow: "var(--shadow-card)",
 } as const;
 
 function EmptyState() {
@@ -74,28 +75,66 @@ function AnalysisPage() {
   const typeData = bySeries(filtered, (a) => a.accidentType);
   const roadData = bySeries(filtered, roadKey, 8);
   const severityData = bySeries(filtered, (a) => a.severity);
+  const topYear = [...yearData].sort((a, b) => b.count - a.count)[0];
+  const topType = typeData[0];
+  const topRoad = roadData[0];
+  const severityFindings = severityData.map((row) => ({
+    ...row,
+    percentage: filtered.length ? Math.round((row.count / filtered.length) * 100) : 0,
+  }));
 
   return (
     <Page>
       <PageHeader
-        title="Analysis"
-        description={`Charts are calculated from ${filtered.length} accident record${
+        title="Accident Pattern Analysis"
+        description={`Interpret trends, locations and severity across ${filtered.length} accident record${
           filtered.length === 1 ? "" : "s"
         } matching the current filters.`}
       />
       <div className="space-y-5">
         <FilterBar />
 
-        <Panel title="Accidents by year" description={describe(filters)}>
-          <div className="h-60">
+        <section className="border-border bg-surface shadow-card rounded-lg border px-4 py-4 sm:px-5" aria-labelledby="key-findings-title">
+          <div className="mb-3">
+            <h2 id="key-findings-title" className="text-base font-semibold">Key Findings</h2>
+            <p className="text-muted-foreground mt-0.5 text-xs">Calculated from the current filters</p>
+          </div>
+          {isEmpty ? (
+            <p className="text-muted-foreground py-4 text-sm">No findings are available for this selection.</p>
+          ) : (
+            <dl className="grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+              <div className="border-border border-l-2 pl-3">
+                <dt className="text-muted-foreground text-xs">Peak year</dt>
+                <dd className="mt-1 font-semibold">{topYear?.year ?? "—"} · {topYear?.count ?? 0} records</dd>
+              </div>
+              <div className="border-border border-l-2 pl-3">
+                <dt className="text-muted-foreground text-xs">Leading accident type</dt>
+                <dd className="mt-1 font-semibold">{topType?.name ?? "—"} · {topType?.count ?? 0}</dd>
+              </div>
+              <div className="border-border border-l-2 pl-3">
+                <dt className="text-muted-foreground text-xs">Highest-count location / road</dt>
+                <dd className="mt-1 font-semibold leading-snug">{topRoad?.name ?? "—"} · {topRoad?.count ?? 0}</dd>
+              </div>
+              <div className="border-border border-l-2 pl-3">
+                <dt className="text-muted-foreground text-xs">Severity distribution</dt>
+                <dd className="mt-1 font-semibold leading-snug">
+                  {severityFindings.map((row) => `${row.name} ${row.percentage}%`).join(" · ") || "—"}
+                </dd>
+              </div>
+            </dl>
+          )}
+        </section>
+
+        <Panel title="Accident Trend by Year" description={`Annual accident records · ${describe(filters)}`}>
+          <div className="h-64 sm:h-72">
             {filteredIgnoringYear.length === 0 ? (
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={yearData} margin={{ top: 8, right: 12, left: -16 }}>
                   <CartesianGrid stroke="var(--color-border)" vertical={false} />
-                  <XAxis dataKey="year" {...axis} />
-                  <YAxis {...axis} />
+                  <XAxis dataKey="year" {...axis} label={{ value: "Year", position: "insideBottom", offset: -2 }} />
+                  <YAxis {...axis} allowDecimals={false} label={{ value: "Records", angle: -90, position: "insideLeft", offset: 18 }} />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Line
                     type="monotone"
@@ -111,8 +150,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by accident type" description="Frequency of each collision category">
-          <div className="h-68">
+        <Panel title="Accident Type Analysis" description="Compare the frequency of each recorded collision category">
+          <div className="h-72">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -123,7 +162,7 @@ function AnalysisPage() {
                   margin={{ top: 4, right: 24, left: 8 }}
                 >
                   <CartesianGrid stroke="var(--color-border)" horizontal={false} />
-                  <XAxis type="number" {...axis} />
+                   <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
                   <YAxis type="category" dataKey="name" width={150} {...axis} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Bar
@@ -139,8 +178,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by location / road" description="Highest-frequency roads in the current selection">
-          <div className="h-76">
+        <Panel title="Location and Road Analysis" description="Identify the Mumbai locations and roads with the highest recorded frequency">
+          <div className="h-80 sm:h-88">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -151,8 +190,8 @@ function AnalysisPage() {
                   margin={{ top: 4, right: 24, left: 8 }}
                 >
                   <CartesianGrid stroke="var(--color-border)" horizontal={false} />
-                  <XAxis type="number" {...axis} />
-                  <YAxis type="category" dataKey="name" width={220} {...axis} />
+                   <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
+                   <YAxis type="category" dataKey="name" width={180} {...axis} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Bar
                     dataKey="count"
@@ -167,8 +206,8 @@ function AnalysisPage() {
           </div>
         </Panel>
 
-        <Panel title="Accidents by severity" description="Fatal, serious and minor records compared">
-          <div className="h-60">
+        <Panel title="Severity Analysis" description="Compare fatal, serious and minor accident records in the current selection">
+          <div className="h-64 sm:h-72">
             {isEmpty ? (
               <EmptyState />
             ) : (
@@ -176,7 +215,7 @@ function AnalysisPage() {
                 <BarChart data={severityData} margin={{ top: 8, right: 12, left: -16 }}>
                   <CartesianGrid stroke="var(--color-border)" vertical={false} />
                   <XAxis dataKey="name" {...axis} />
-                  <YAxis {...axis} />
+                   <YAxis {...axis} allowDecimals={false} label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 18 }} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Bar dataKey="count" name="Accidents" radius={[4, 4, 0, 0]} barSize={56}>
                     {severityData.map((row) => (

@@ -22,10 +22,15 @@ export default function AccidentMap({
     ? hotspots(records).filter((s) => s.count >= HOTSPOT_MIN_COUNT)
     : [];
 
+  const displayRecords = offsetOverlappingRecords(records);
+
   return (
     <MapContainer
       center={CITY_CENTER}
       zoom={zoom}
+      minZoom={10}
+      maxBounds={[[18.84, 72.72], [19.32, 73.08]]}
+      maxBoundsViscosity={0.7}
       scrollWheelZoom={interactive}
       dragging={interactive}
       style={{ height, width: "100%" }}
@@ -44,21 +49,21 @@ export default function AccidentMap({
           pathOptions={{
             color: "transparent",
             fillColor: "#c0392b",
-            fillOpacity: Math.min(0.08 + s.count * 0.012, 0.28),
+            fillOpacity: Math.min(0.06 + s.count * 0.009, 0.2),
           }}
         />
       ))}
 
-      {records.map((a) => (
+      {displayRecords.map(({ record: a, latitude, longitude }) => (
         <CircleMarker
           key={a.id}
-          center={[a.latitude, a.longitude]}
-          radius={a.severity === "Fatal" ? 7 : a.severity === "Serious" ? 5.5 : 4.5}
+          center={[latitude, longitude]}
+          radius={a.severity === "Fatal" ? 6.5 : a.severity === "Serious" ? 5 : 4}
           pathOptions={{
             color: severityColor[a.severity],
             weight: 1.5,
             fillColor: severityColor[a.severity],
-            fillOpacity: 0.75,
+            fillOpacity: 0.68,
           }}
         >
           <Popup>
@@ -80,4 +85,23 @@ export default function AccidentMap({
       ))}
     </MapContainer>
   );
+}
+
+function offsetOverlappingRecords(records: AccidentRecord[]) {
+  const seen = new Map<string, number>();
+  return records.map((record) => {
+    const key = `${record.latitude.toFixed(5)}|${record.longitude.toFixed(5)}`;
+    const index = seen.get(key) ?? 0;
+    seen.set(key, index + 1);
+    if (index === 0) return { record, latitude: record.latitude, longitude: record.longitude };
+
+    const ring = Math.floor((index - 1) / 8) + 1;
+    const angle = ((index - 1) % 8) * (Math.PI / 4);
+    const distance = ring * 0.00075;
+    return {
+      record,
+      latitude: record.latitude + Math.sin(angle) * distance,
+      longitude: record.longitude + Math.cos(angle) * distance,
+    };
+  });
 }

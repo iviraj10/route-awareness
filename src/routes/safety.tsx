@@ -7,13 +7,13 @@ import { highRiskLocations } from "@/lib/accident-analytics";
 export const Route = createFileRoute("/safety")({
   head: () => ({
     meta: [
-      { title: "Safety Information — Road Accident Hotspot Analysis" },
+      { title: "Road Safety Awareness — RoadSense" },
       {
         name: "description",
         content:
           "Road safety precautions, guidance for accident-prone areas and general recommendations for drivers and pedestrians.",
       },
-      { property: "og:title", content: "Safety Information — Road Accident Hotspot Analysis" },
+      { property: "og:title", content: "Road Safety Awareness — RoadSense" },
       {
         property: "og:description",
         content: "Road safety precautions and guidance for accident-prone areas.",
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/safety")({
   component: SafetyPage,
 });
 
-const precautions = [
+const driverPrecautions = [
   "Follow posted speed limits, and reduce speed further in rain, fog or low light.",
   "Wear a helmet on two-wheelers and a seat belt in every seat of a car.",
   "Keep a safe following distance, particularly on roads with repeated collision records.",
@@ -35,10 +35,16 @@ const precautions = [
 
 const recommendations = [
   "Plan longer trips outside peak traffic hours when possible.",
-  "Prefer well-lit, signalled crossings as a pedestrian, even if the detour is longer.",
   "Service brakes, tyres and lights regularly — vehicle condition affects stopping distance.",
   "Report broken signals, missing signage or damaged road surfaces to local authorities.",
   "Allow extra time near busy junctions and roads highlighted by the analysis.",
+];
+
+const pedestrianSafety = [
+  "Use well-lit, signalled crossings even when the route is slightly longer.",
+  "Make eye contact with approaching drivers before stepping into a crossing.",
+  "Stay visible at night and avoid phone use while crossing busy roads.",
+  "Allow extra distance around buses, trucks and vehicles with limited visibility.",
 ];
 
 function SafetyPage() {
@@ -47,20 +53,21 @@ function SafetyPage() {
   return (
     <Page>
       <PageHeader
-        title="Safety Information"
-        description="Practical guidance to interpret historical accident patterns with appropriate caution."
+        title="Road Safety Awareness"
+        description="Use historical accident patterns to support awareness around Mumbai roads and high-risk locations."
       />
 
       <div className="space-y-5">
         <p className="border-border bg-muted/40 rounded-lg border px-4 py-3 text-sm leading-relaxed">
-          Use the map and charts to understand where recorded accidents are concentrated. Treat these
-          patterns as context for safer decisions, not as predictions of future conditions.
+          <span className="font-semibold">General road safety:</span> use the map and analysis to understand
+          where recorded accidents are concentrated. Treat these patterns as context for awareness,
+          not as predictions of future conditions.
         </p>
 
         <div className="grid gap-5 lg:grid-cols-2">
-        <Panel title="Everyday road-safety precautions" description="Useful on every journey">
+        <Panel title="Driver Precautions" description="Practical habits for every journey">
           <ul className="space-y-3 text-sm">
-            {precautions.map((p) => (
+            {driverPrecautions.map((p) => (
               <li key={p} className="flex gap-3">
                 <span className="bg-primary mt-2 size-1.5 shrink-0 rounded-full" />
                 <span>{p}</span>
@@ -69,9 +76,9 @@ function SafetyPage() {
           </ul>
         </Panel>
 
-        <Panel title="Basic safety recommendations" description="When planning and reporting journeys">
+        <Panel title="Pedestrian Safety" description="Extra care around busy roads and crossings">
           <ul className="space-y-3 text-sm">
-            {recommendations.map((r) => (
+            {pedestrianSafety.map((r) => (
               <li key={r} className="flex gap-3">
                 <span className="bg-primary mt-2 size-1.5 shrink-0 rounded-full" />
                 <span>{r}</span>
@@ -82,8 +89,8 @@ function SafetyPage() {
         </div>
 
         <Panel
-          title="Accident-prone areas in this dataset"
-          description="Areas where recorded accidents are most concentrated"
+           title="High-Risk Area Awareness"
+           description="Mumbai locations meeting the dataset’s accident-concentration threshold"
         >
           <ul className="divide-border divide-y text-sm">
             {topSpots.map((s, i) => (
@@ -95,6 +102,12 @@ function SafetyPage() {
               </li>
             ))}
           </ul>
+          <div className="border-border mt-4 border-t pt-4">
+            <h3 className="text-sm font-semibold">Around highlighted areas</h3>
+            <ul className="text-muted-foreground mt-2 grid gap-2 text-xs sm:grid-cols-2">
+              {recommendations.map((item) => <li key={item}>• {item}</li>)}
+            </ul>
+          </div>
           <p className="text-muted-foreground mt-4 text-xs">
             A higher historical count supports extra awareness, but does not establish current risk
             or guarantee that other areas are safer.
