@@ -17,7 +17,7 @@ export default function AccidentMap({
   height = "520px",
   showHotspots = true,
   interactive = true,
-  zoom = 12,
+  zoom = 11,
 }: Props) {
   const spots = showHotspots
     ? hotspots(records).filter((s) => s.count >= HOTSPOT_MIN_COUNT)
