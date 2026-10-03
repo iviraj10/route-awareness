@@ -58,11 +58,13 @@ function SafetyPage() {
       />
 
       <div className="space-y-5">
-        <p className="border-border bg-muted/40 rounded-lg border px-4 py-3 text-sm leading-relaxed">
-          <span className="font-semibold">General road safety:</span> use the map and analysis to understand
-          where recorded accidents are concentrated. Treat these patterns as context for awareness,
-          not as predictions of future conditions.
-        </p>
+        <section className="border-border bg-muted/40 rounded-lg border px-4 py-3" aria-labelledby="general-safety-title">
+          <h2 id="general-safety-title" className="text-sm font-semibold">General Road Safety</h2>
+          <p className="mt-1 text-sm leading-relaxed">
+            Use the map and analysis to understand where recorded accidents are concentrated. Treat
+            these patterns as context for awareness, not as predictions of future conditions.
+          </p>
+        </section>
 
         <div className="grid gap-5 lg:grid-cols-2">
         <Panel title="Driver Precautions" description="Practical habits for every journey">

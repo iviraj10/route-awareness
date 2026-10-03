@@ -140,6 +140,7 @@ function AnalysisPage() {
                     type="monotone"
                     dataKey="count"
                     name="Accidents"
+                    isAnimationActive={false}
                     stroke="var(--color-chart-1)"
                     strokeWidth={2}
                     dot={{ r: 3 }}
@@ -168,6 +169,7 @@ function AnalysisPage() {
                   <Bar
                     dataKey="count"
                     name="Accidents"
+                    isAnimationActive={false}
                     fill="var(--color-chart-1)"
                     radius={[0, 4, 4, 0]}
                     barSize={16}
@@ -196,6 +198,7 @@ function AnalysisPage() {
                   <Bar
                     dataKey="count"
                     name="Accidents"
+                    isAnimationActive={false}
                     fill="var(--color-chart-4)"
                     radius={[0, 4, 4, 0]}
                     barSize={14}
@@ -217,7 +220,7 @@ function AnalysisPage() {
                   <XAxis dataKey="name" {...axis} />
                    <YAxis {...axis} allowDecimals={false} label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 18 }} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
-                  <Bar dataKey="count" name="Accidents" radius={[4, 4, 0, 0]} barSize={56}>
+                  <Bar dataKey="count" name="Accidents" isAnimationActive={false} radius={[4, 4, 0, 0]} barSize={56}>
                     {severityData.map((row) => (
                       <Cell key={row.name} fill={severityColor[row.name as Severity]} />
                     ))}

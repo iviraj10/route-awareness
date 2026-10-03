@@ -114,6 +114,7 @@ function Dashboard() {
                   type="monotone"
                   dataKey="count"
                   name="Accidents"
+                  isAnimationActive={false}
                   stroke="var(--color-chart-1)"
                   strokeWidth={2}
                   dot={(props) => {
