@@ -25,8 +25,8 @@ export default function AccidentMap({
 
   return (
     <MapContainer
-      bounds={[[18.9, 72.79], [19.26, 72.99]]}
-      boundsOptions={{ padding: [16, 16] }}
+      center={[19.07, 72.87]}
+      zoom={zoom}
       minZoom={10}
       zoomSnap={0.5}
       maxBounds={[[18.84, 72.72], [19.32, 73.08]]}
