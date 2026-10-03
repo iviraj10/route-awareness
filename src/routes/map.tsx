@@ -38,7 +38,7 @@ function MapPage() {
       />
       <div className="space-y-5">
         <FilterBar />
-        <MapPanel records={filtered} height="min(62vh, 620px)" zoom={11} />
+        <MapPanel records={filtered} height="min(62vh, 620px)" zoom={11.5} />
         {spots.length > 0 && spots[0] ? (
           <p className="text-muted-foreground text-sm">
             {spots.length} high-risk area{spots.length > 1 ? "s" : ""} in the current selection —

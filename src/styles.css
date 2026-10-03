@@ -138,10 +138,14 @@
   border-radius: 9999px;
   background: oklch(0.44 0.13 255 / 0.88);
   color: var(--color-primary-foreground);
-  font: 600 12px var(--font-mono);
+  font: 600 12px/1 var(--font-mono);
   box-shadow: 0 0 0 5px oklch(0.44 0.13 255 / 0.18);
 }
 .rs-popup { min-width: 180px; font-size: 13px; }
 .rs-popup-title { font-weight: 600; font-size: 15px; margin: 0 0 6px; }
 .rs-popup dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; color: var(--color-muted-foreground); }
 .rs-popup dd { margin: 0; color: var(--color-foreground); }
+
+/* Subtle, light basemap so accident data stays the focus */
+.rs-basemap { filter: grayscale(1) contrast(0.85) brightness(1.08) opacity(0.75); }
+.rs-cluster span { display: block; }
