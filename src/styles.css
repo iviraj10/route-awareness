@@ -147,5 +147,5 @@
 .rs-popup dd { margin: 0; color: var(--color-foreground); }
 
 /* Subtle, light basemap so accident data stays the focus */
-.rs-basemap { filter: grayscale(1) contrast(0.85) brightness(1.08) opacity(0.75); }
-.rs-cluster span { display: block; }
+.rs-basemap { filter: grayscale(1) contrast(0.8) brightness(1.12); }
+.rs-cluster span { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; }
