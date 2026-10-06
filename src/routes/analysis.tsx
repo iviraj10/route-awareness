@@ -75,13 +75,29 @@ function AnalysisPage() {
   const typeData = bySeries(filtered, (a) => a.accidentType);
   const roadData = bySeries(filtered, roadKey, 8);
   const severityData = bySeries(filtered, (a) => a.severity);
-  const topYear = [...yearData].sort((a, b) => b.count - a.count)[0];
+  const yearInSelection = byYearSeries(filtered);
+  const topYear = [...yearInSelection].sort((a, b) => b.count - a.count)[0];
   const topType = typeData[0];
   const topRoad = roadData[0];
-  const severityFindings = severityData.map((row) => ({
-    ...row,
-    percentage: filtered.length ? Math.round((row.count / filtered.length) * 100) : 0,
-  }));
+  const topSeverity = severityData[0];
+  const pct = (n: number) => (filtered.length ? Math.round((n / filtered.length) * 100) : 0);
+  const plural = (n: number) => `${n} recorded accident${n === 1 ? "" : "s"}`;
+
+  const findings = [
+    { label: "Peak accident year", value: topYear?.year ?? "—", detail: plural(topYear?.count ?? 0) },
+    { label: "Highest accident location / road", value: topRoad?.name ?? "—", detail: plural(topRoad?.count ?? 0) },
+    { label: "Most common accident type", value: topType?.name ?? "—", detail: `${plural(topType?.count ?? 0)} · ${pct(topType?.count ?? 0)}%` },
+    {
+      label: "Largest severity category",
+      value: topSeverity?.name ?? "—",
+      detail: `${plural(topSeverity?.count ?? 0)} · ${pct(topSeverity?.count ?? 0)}%`,
+    },
+  ];
+
+  const insight =
+    topYear && topRoad && topType && topSeverity
+      ? `Across the ${filtered.length} selected records, ${filters.year !== "all" ? "all accidents fall in" : "accident frequency peaks in"} ${topYear.year} (${topYear.count}), and the highest concentration is recorded at ${topRoad.name} (${topRoad.count}). ${topType.name} is the most common accident type at ${pct(topType.count)}% of records, while ${topSeverity.name.toLowerCase()} accidents form the largest severity group (${pct(topSeverity.count)}%).`
+      : "";
 
   return (
     <Page>
@@ -94,34 +110,34 @@ function AnalysisPage() {
       <div className="space-y-5">
         <FilterBar />
 
-        <section className="border-border bg-surface shadow-card rounded-lg border px-4 py-4 sm:px-5" aria-labelledby="key-findings-title">
-          <div className="mb-3">
+        <section
+          className="border-border bg-surface shadow-card rounded-lg border px-4 py-5 sm:px-6"
+          aria-labelledby="key-findings-title"
+        >
+          <div className="mb-4">
             <h2 id="key-findings-title" className="text-base font-semibold">Key Findings</h2>
-            <p className="text-muted-foreground mt-0.5 text-xs">Calculated from the current filters</p>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              Recalculated from {filtered.length} record{filtered.length === 1 ? "" : "s"} in the current selection
+            </p>
           </div>
           {isEmpty ? (
             <p className="text-muted-foreground py-4 text-sm">No findings are available for this selection.</p>
           ) : (
-            <dl className="grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
-              <div className="border-border border-l-2 pl-3">
-                <dt className="text-muted-foreground text-xs">Peak year</dt>
-                <dd className="mt-1 font-semibold">{topYear?.year ?? "—"} · {topYear?.count ?? 0} records</dd>
-              </div>
-              <div className="border-border border-l-2 pl-3">
-                <dt className="text-muted-foreground text-xs">Leading accident type</dt>
-                <dd className="mt-1 font-semibold">{topType?.name ?? "—"} · {topType?.count ?? 0}</dd>
-              </div>
-              <div className="border-border border-l-2 pl-3">
-                <dt className="text-muted-foreground text-xs">Highest-count location / road</dt>
-                <dd className="mt-1 font-semibold leading-snug">{topRoad?.name ?? "—"} · {topRoad?.count ?? 0}</dd>
-              </div>
-              <div className="border-border border-l-2 pl-3">
-                <dt className="text-muted-foreground text-xs">Severity distribution</dt>
-                <dd className="mt-1 font-semibold leading-snug">
-                  {severityFindings.map((row) => `${row.name} ${row.percentage}%`).join(" · ") || "—"}
-                </dd>
-              </div>
+            <dl className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+              {findings.map((f) => (
+                <div key={f.label} className="border-primary/30 border-l-2 pl-3">
+                  <dd className="text-lg leading-snug font-semibold">{f.value}</dd>
+                  <dt className="text-foreground mt-0.5 text-xs font-medium">{f.label}</dt>
+                  <dd className="text-muted-foreground mt-1 font-mono text-xs">{f.detail}</dd>
+                </div>
+              ))}
             </dl>
+          )}
+          {!isEmpty && (
+            <div className="border-border mt-5 border-t pt-4" aria-labelledby="data-shows-title">
+              <h3 id="data-shows-title" className="text-sm font-semibold">What the data shows</h3>
+              <p className="text-muted-foreground mt-1 max-w-3xl text-sm leading-relaxed">{insight}</p>
+            </div>
           )}
         </section>
 
