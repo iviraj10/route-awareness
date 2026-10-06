@@ -147,10 +147,10 @@ function AnalysisPage() {
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={yearData} margin={{ top: 8, right: 12, left: -16 }}>
+                <LineChart data={yearData} margin={{ top: 8, right: 12, left: 4, bottom: 16 }}>
                   <CartesianGrid stroke="var(--color-border)" vertical={false} />
                   <XAxis dataKey="year" {...axis} label={{ value: "Year", position: "insideBottom", offset: -2 }} />
-                  <YAxis {...axis} allowDecimals={false} label={{ value: "Records", angle: -90, position: "insideLeft", offset: 18 }} />
+                  <YAxis {...axis} allowDecimals={false} label={{ value: "Records", angle: -90, position: "insideLeft", offset: 4 }} />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Line
                     type="monotone"
@@ -176,7 +176,7 @@ function AnalysisPage() {
                 <BarChart
                   data={typeData}
                   layout="vertical"
-                  margin={{ top: 4, right: 24, left: 8 }}
+                  margin={{ top: 4, right: 24, left: 8, bottom: 16 }}
                 >
                   <CartesianGrid stroke="var(--color-border)" horizontal={false} />
                    <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
@@ -205,7 +205,7 @@ function AnalysisPage() {
                 <BarChart
                   data={roadData}
                   layout="vertical"
-                  margin={{ top: 4, right: 24, left: 8 }}
+                  margin={{ top: 4, right: 24, left: 8, bottom: 16 }}
                 >
                   <CartesianGrid stroke="var(--color-border)" horizontal={false} />
                    <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
@@ -231,10 +231,10 @@ function AnalysisPage() {
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={severityData} margin={{ top: 8, right: 12, left: -16 }}>
+                <BarChart data={severityData} margin={{ top: 8, right: 12, left: 4, bottom: 16 }}>
                   <CartesianGrid stroke="var(--color-border)" vertical={false} />
                   <XAxis dataKey="name" {...axis} />
-                   <YAxis {...axis} allowDecimals={false} label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 18 }} />
+                   <YAxis {...axis} allowDecimals={false} label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 4 }} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Bar dataKey="count" name="Accidents" isAnimationActive={false} radius={[4, 4, 0, 0]} barSize={56}>
                     {severityData.map((row) => (
