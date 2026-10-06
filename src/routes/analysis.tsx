@@ -96,7 +96,7 @@ function AnalysisPage() {
 
   const insight =
     topYear && topRoad && topType && topSeverity
-      ? `Across the ${filtered.length} selected records, ${filters.year !== "all" ? "all accidents fall in" : "accident frequency peaks in"} ${topYear.year} (${topYear.count}), and the highest concentration is recorded at ${topRoad.name} (${topRoad.count}). ${topType.name} is the most common accident type at ${pct(topType.count)}% of records, while ${topSeverity.name.toLowerCase()} accidents form the largest severity group (${pct(topSeverity.count)}%).`
+      ? `Across ${filtered.length === 1 ? "the 1 selected record" : `the ${filtered.length} selected records`}, ${filters.year !== "all" ? "all accidents fall in" : "accident frequency peaks in"} ${topYear.year} (${topYear.count}), and the highest concentration is recorded at ${topRoad.name} (${topRoad.count}). ${topType.name} is the most common accident type at ${pct(topType.count)}% of records, while ${topSeverity.name.toLowerCase()} accidents form the largest severity group (${pct(topSeverity.count)}%).`
       : "";
 
   return (
