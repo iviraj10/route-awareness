@@ -4,8 +4,7 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
-  Line,
-  LineChart,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -69,10 +68,10 @@ function EmptyState() {
 }
 
 function AnalysisPage() {
-  const { filtered, filteredIgnoringYear, filters } = useFilters();
+  const { filtered, filters } = useFilters();
   const isEmpty = filtered.length === 0;
 
-  const yearData = byYearSeries(filteredIgnoringYear);
+  const locationData = bySeries(filtered, (a) => a.location, 10);
   const typeData = bySeries(filtered, (a) => a.accidentType);
   const roadData = bySeries(filtered, roadKey, 8);
   const severityData = bySeries(filtered, (a) => a.severity);
@@ -142,27 +141,21 @@ function AnalysisPage() {
           )}
         </section>
 
-        <Panel title="Accident Trend by Year" description={`Annual accident records · ${describe(filters)}`}>
-          <div className="h-64 sm:h-72">
-            {filteredIgnoringYear.length === 0 ? (
+        <Panel title="Accident Concentration by Location" description="Top accident locations within the currently selected dataset">
+          <div style={{ height: Math.max(locationData.length * 34 + 56, 160) }}>
+            {isEmpty ? (
               <EmptyState />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={yearData} margin={{ top: 8, right: 12, left: 4, bottom: 16 }}>
-                  <CartesianGrid stroke="var(--color-border)" vertical={false} />
-                  <XAxis dataKey="year" {...axis} label={{ value: "Year", position: "insideBottom", offset: -2 }} />
-                  <YAxis {...axis} allowDecimals={false} label={{ value: "Records", angle: -90, position: "insideLeft", offset: 4 }} />
-                  <Tooltip contentStyle={tooltipStyle} />
-                  <Line
-                    type="monotone"
-                    dataKey="count"
-                    name="Accidents"
-                    isAnimationActive={false}
-                    stroke="var(--color-chart-1)"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                  />
-                </LineChart>
+                <BarChart data={locationData} layout="vertical" margin={{ top: 4, right: 40, left: 8, bottom: 16 }}>
+                  <CartesianGrid stroke="var(--color-border)" horizontal={false} />
+                  <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
+                  <YAxis type="category" dataKey="name" width={110} {...axis} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
+                  <Bar dataKey="count" name="Accident records" isAnimationActive={false} fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={16}>
+                    <LabelList dataKey="count" position="right" fontSize={12} fill="var(--color-foreground)" />
+                  </Bar>
+                </BarChart>
               </ResponsiveContainer>
             )}
           </div>
@@ -290,14 +283,4 @@ function AnalysisPage() {
       </div>
     </Page>
   );
-}
-
-function describe(f: Filters) {
-  const parts = [
-    f.road !== "all" ? f.road : null,
-    f.accidentType !== "all" ? f.accidentType : null,
-    f.severity !== "all" ? `${f.severity} severity` : null,
-    f.year !== "all" ? f.year : null,
-  ].filter(Boolean);
-  return parts.length ? parts.join(" · ") : "Whole dataset";
 }
