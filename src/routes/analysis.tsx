@@ -22,7 +22,8 @@ import {
   type Filters,
 } from "@/lib/accident-analytics";
 import { useFilters } from "@/lib/filter-context";
-import type { Severity } from "@/data/accidents";
+import { accidents, DATASET_YEARS, type Severity } from "@/data/accidents";
+import { HIGH_RISK_THRESHOLD } from "@/lib/accident-analytics";
 
 export const Route = createFileRoute("/analysis")({
   head: () => ({
@@ -246,6 +247,46 @@ function AnalysisPage() {
             )}
           </div>
         </Panel>
+        <section
+          className="border-border bg-surface shadow-card rounded-lg border px-4 py-5 sm:px-6"
+          aria-labelledby="methodology-title"
+        >
+          <h2 id="methodology-title" className="text-base font-semibold">Methodology &amp; Dataset</h2>
+          <p className="text-muted-foreground mt-0.5 text-xs">How the accident patterns on this page are derived</p>
+          <dl className="mt-4 grid gap-x-8 gap-y-5 text-sm md:grid-cols-2">
+            <div>
+              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Dataset</dt>
+              <dd className="mt-1 leading-relaxed">
+                {accidents.length} Mumbai-only accident records covering {DATASET_YEARS[0]}–{DATASET_YEARS[DATASET_YEARS.length - 1]}.
+                This is a study/demo dataset prepared for the project — it is not live or official government data.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Analysis parameters</dt>
+              <dd className="mt-1 leading-relaxed">
+                Each record is analysed by Year, Location, Road, Accident Type and Severity. The filters above narrow every finding and chart on this page.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Hotspot method</dt>
+              <dd className="mt-1 leading-relaxed">
+                Accident coordinates are grouped by geographic proximity. Areas with a higher concentration of recorded accidents are shown as hotspots. This describes past records only and does not predict future accidents.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">High-risk location</dt>
+              <dd className="mt-1 leading-relaxed">
+                A location with {HIGH_RISK_THRESHOLD} or more recorded accident cases is classified as a High-Risk Location for this study. This is a project-defined threshold, not an official government classification.
+              </dd>
+            </div>
+          </dl>
+          <div className="border-border mt-5 border-t pt-4">
+            <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Purpose</p>
+            <p className="mt-1 max-w-3xl text-sm leading-relaxed">
+              The analysis is intended to identify historical accident patterns, concentration areas, and severity trends to support awareness and data-driven discussion.
+            </p>
+          </div>
+        </section>
       </div>
     </Page>
   );
