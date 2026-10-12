@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { csvFilename, downloadCsv } from "@/lib/csv-export";
 import {
   Bar,
   BarChart,
@@ -70,6 +74,8 @@ function EmptyState() {
 function AnalysisPage() {
   const { filtered, filters } = useFilters();
   const isEmpty = filtered.length === 0;
+  const [exportMsg, setExportMsg] = useState("");
+  useEffect(() => setExportMsg(""), [filtered]);
 
   const locationData = bySeries(filtered, (a) => a.location, 10);
   const typeData = bySeries(filtered, (a) => a.accidentType);
@@ -109,6 +115,25 @@ function AnalysisPage() {
       />
       <div className="space-y-5">
         <FilterBar />
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          <p className="text-muted-foreground text-xs" role="status" aria-live="polite">
+            {isEmpty ? "No records to export for this selection." : exportMsg}
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isEmpty}
+            aria-label={`Export ${filtered.length} filtered accident records as CSV`}
+            onClick={() => {
+              const name = csvFilename(filters.year);
+              downloadCsv(filtered, name);
+              setExportMsg(`Download started: ${name} (${filtered.length} records)`);
+            }}
+          >
+            <Download className="size-3.5" />
+            Export CSV
+          </Button>
+        </div>
 
         <section
           className="border-border bg-surface shadow-card rounded-lg border px-4 py-5 sm:px-6"
