@@ -11,7 +11,7 @@ import {
 import { Page, PageHeader } from "@/components/AppShell";
 import { FilterBar } from "@/components/FilterBar";
 import { Panel, StatCard } from "@/components/StatCard";
-import { byYearSeries, summary } from "@/lib/accident-analytics";
+import { byYearSeries, HIGH_RISK_THRESHOLD, summary } from "@/lib/accident-analytics";
 import { useFilters } from "@/lib/filter-context";
 
 export const Route = createFileRoute("/")({
@@ -47,6 +47,17 @@ function Dashboard() {
         description="See where accidents are concentrated, how frequently they occur, and which patterns emerge across the recorded data."
       />
 
+      <section
+        aria-labelledby="intro-title"
+        className="border-border bg-surface mb-5 rounded-lg border border-l-2 border-l-primary px-4 py-3.5 sm:px-5"
+      >
+        <h2 id="intro-title" className="text-sm font-semibold">Understand Mumbai's Accident Patterns</h2>
+        <p className="text-muted-foreground mt-1 max-w-3xl text-sm leading-relaxed">
+          Explore historical road accident records across Mumbai, identify accident-prone locations, and understand
+          patterns by year, accident type, and severity.
+        </p>
+      </section>
+
       <div className="space-y-5">
         <FilterBar />
 
@@ -54,22 +65,22 @@ function Dashboard() {
         <StatCard
           label="Total accidents"
           value={stats.total}
-          detail="Records in selected dataset"
+          detail="Accident records in the current selection"
         />
         <StatCard
           label="High-risk locations"
           value={stats.highRisk}
-          detail="Locations meeting hotspot threshold"
+          detail={`Locations with ${HIGH_RISK_THRESHOLD}+ records · project-defined threshold`}
         />
         <StatCard
           label="Most common type"
           value={stats.commonType}
-          detail={`${stats.commonTypeCount} records · most frequent category`}
+          detail={`Most frequent accident category · ${stats.commonTypeCount} records`}
         />
         <StatCard
           label="Most affected year"
           value={stats.worstYear}
-          detail={`${stats.worstYearCount} records · highest count`}
+          detail={`Year with the most recorded accidents · ${stats.worstYearCount} records`}
         />
         </div>
       </div>
