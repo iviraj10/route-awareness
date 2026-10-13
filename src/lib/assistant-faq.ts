@@ -14,7 +14,7 @@ const last = DATASET_YEARS[DATASET_YEARS.length - 1];
 export const intents: Intent[] = [
   {
     id: "about",
-    keywords: ["roadsense", "what is", "what does", "purpose", "about", "project", "app"],
+    keywords: ["roadsense", "purpose", "about", "project"],
     answer: () =>
       "RoadSense is an academic road accident hotspot analysis tool. It lets you filter Mumbai accident records, view them on a map, and study accident patterns by year, location, type and severity. It describes past records only — it does not predict accidents.",
   },
