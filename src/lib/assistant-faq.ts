@@ -74,7 +74,7 @@ export const suggestedQuestions = [
   "What is a high-risk location?",
   "What does the dataset include?",
   "How does CSV export work?",
-  "Road safety tips for pedestrians",
+  "Tips for pedestrians",
 ];
 
 export const fallbackAnswer =
