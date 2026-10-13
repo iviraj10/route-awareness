@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Map, BarChart3, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { RoadSenseLogo } from "@/components/RoadSenseLogo";
+import { RoadSenseAssistant } from "@/components/RoadSenseAssistant";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -40,6 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <main className="min-w-0 flex-1">{children}</main>
+      <RoadSenseAssistant />
     </div>
   );
 }
