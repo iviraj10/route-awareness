@@ -64,8 +64,8 @@ function CompareCard({ title, yearA, yearB, a, b, change }: { title: string; yea
 
 export function YearComparison() {
   const { filters, filteredIgnoringYear } = useFilters();
-  const [yearA, setYearA] = useState(fallbackYears[fallbackYears.length - 2] ?? fallbackYears[0]);
-  const [yearB, setYearB] = useState(fallbackYears[fallbackYears.length - 1]);
+  const [yearA, setYearA] = useState<number>(fallbackYears[fallbackYears.length - 2] ?? fallbackYears[0] ?? 0);
+  const [yearB, setYearB] = useState<number>(fallbackYears[fallbackYears.length - 1] ?? 0);
   const [useAll, setUseAll] = useState(false);
 
   const otherFilters = activeFilterCount({ ...filters, year: "all" });
