@@ -7,7 +7,7 @@ describe("pctChange", () => {
   it("decrease", () => expect(pctChange(3, 2)).toBe("−33.3%"));
   it("zero baseline", () => expect(pctChange(0, 5)).toBe("N/A — no baseline records"));
   it("both zero", () => expect(pctChange(0, 0)).toBe("No change"));
-  it("drop to zero", () => expect(pctChange(7, 0)).toBe("−100.0%"));
+  it("drop to zero", () => expect(pctChange(7, 0)).toBe("−100%"));
 });
 
 describe("compareYears", () => {

@@ -6,6 +6,7 @@ const SEVERITIES: Severity[] = ["Fatal", "Serious", "Minor"];
 export function pctChange(a: number, b: number): string {
   if (a === 0 && b === 0) return "No change";
   if (a === 0) return "N/A — no baseline records";
+  if (b === 0) return "−100%";
   const p = ((b - a) / a) * 100;
   if (p === 0) return "No change";
   return `${p > 0 ? "+" : "−"}${Math.abs(p).toFixed(1)}%`;
