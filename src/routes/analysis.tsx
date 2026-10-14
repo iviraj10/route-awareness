@@ -17,6 +17,7 @@ import {
 import { Page, PageHeader } from "@/components/AppShell";
 import { FilterBar } from "@/components/FilterBar";
 import { Panel } from "@/components/StatCard";
+import { YearComparison } from "@/components/YearComparison";
 import {
   bySeries,
   byYearSeries,
@@ -165,6 +166,9 @@ function AnalysisPage() {
             </div>
           )}
         </section>
+
+        <YearComparison />
+
 
         <Panel title="Accident Concentration by Location" description="Top accident locations within the currently selected dataset">
           <div style={{ height: Math.max(locationData.length * 34 + 56, 160) }}>
