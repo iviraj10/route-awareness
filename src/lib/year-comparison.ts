@@ -64,7 +64,7 @@ export function comparisonInsights(c: YearComparison, yearA: number, yearB: numb
     out.push(`${hi} has more recorded accidents than ${lo} (${Math.max(c.a.total, c.b.total)} vs ${Math.min(c.a.total, c.b.total)}).`);
   }
   const sev = [...c.severity].sort((x, y) => Math.abs(y.b - y.a) - Math.abs(x.b - x.a))[0];
-  if (sev.a === sev.b) out.push("Each severity category has the same count in both years.");
+  if (!sev || sev.a === sev.b) out.push("Each severity category has the same count in both years.");
   else out.push(`${sev.name} accidents show the largest count difference between the years (${sev.a} in ${yearA}, ${sev.b} in ${yearB}).`);
   const loc = (y: number, l: { name: string; count: number } | null) => (l ? `${l.name} in ${y} (${l.count})` : `no location in ${y}`);
   out.push(`The highest recorded location count is ${loc(yearA, c.a.location)} and ${loc(yearB, c.b.location)}.`);
