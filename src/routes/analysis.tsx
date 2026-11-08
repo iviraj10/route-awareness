@@ -1,3 +1,4 @@
+import { reducedMotion } from "@/lib/reduced-motion";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
@@ -181,7 +182,7 @@ function AnalysisPage() {
                   <XAxis type="number" {...axis} allowDecimals={false} label={{ value: "Accident records", position: "insideBottom", offset: -2 }} />
                   <YAxis type="category" dataKey="name" width={110} {...axis} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
-                  <Bar dataKey="count" name="Accident records" isAnimationActive={false} fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={16}>
+                  <Bar dataKey="count" name="Accident records" isAnimationActive={!reducedMotion} animationDuration={350} fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={16}>
                     <LabelList dataKey="count" position="right" fontSize={12} fill="var(--color-foreground)" />
                   </Bar>
                 </BarChart>
@@ -208,7 +209,7 @@ function AnalysisPage() {
                   <Bar
                     dataKey="count"
                     name="Accidents"
-                    isAnimationActive={false}
+                    isAnimationActive={!reducedMotion} animationDuration={350}
                     fill="var(--color-chart-1)"
                     radius={[0, 4, 4, 0]}
                     barSize={16}
@@ -237,7 +238,7 @@ function AnalysisPage() {
                   <Bar
                     dataKey="count"
                     name="Accidents"
-                    isAnimationActive={false}
+                    isAnimationActive={!reducedMotion} animationDuration={350}
                     fill="var(--color-chart-4)"
                     radius={[0, 4, 4, 0]}
                     barSize={14}
@@ -259,7 +260,7 @@ function AnalysisPage() {
                   <XAxis dataKey="name" {...axis} />
                    <YAxis {...axis} allowDecimals={false} label={{ value: "Accident records", angle: -90, position: "insideLeft", offset: 4 }} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
-                  <Bar dataKey="count" name="Accidents" isAnimationActive={false} radius={[4, 4, 0, 0]} barSize={56}>
+                  <Bar dataKey="count" name="Accidents" isAnimationActive={!reducedMotion} animationDuration={350} radius={[4, 4, 0, 0]} barSize={56}>
                     {severityData.map((row) => (
                       <Cell key={row.name} fill={severityColor[row.name as Severity]} />
                     ))}

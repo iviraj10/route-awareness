@@ -51,7 +51,7 @@ export function RoadSenseAssistant() {
           role="dialog"
           aria-label="RoadSense Assistant"
           onKeyDown={(e) => e.key === "Escape" && close()}
-          className="border-border bg-surface shadow-card flex h-[min(520px,calc(100dvh-6rem))] w-[min(360px,calc(100vw-2rem))] flex-col overflow-hidden rounded-lg border"
+          className="rs-sheet-in border-border bg-surface shadow-card flex h-[min(520px,calc(100dvh-6rem))] w-[min(360px,calc(100vw-2rem))] flex-col overflow-hidden rounded-lg border"
         >
           <header className="border-border flex items-center gap-2.5 border-b px-4 py-3">
             <RoadSenseLogo className="size-7" />
@@ -70,8 +70,8 @@ export function RoadSenseAssistant() {
                 key={i}
                 className={
                   m.from === "user"
-                    ? "bg-primary text-primary-foreground ml-auto max-w-[85%] rounded-lg px-3 py-2 text-sm"
-                    : "bg-muted text-foreground max-w-[90%] rounded-lg px-3 py-2 text-sm leading-relaxed"
+                    ? "rs-msg-in bg-primary text-primary-foreground ml-auto max-w-[85%] rounded-lg px-3 py-2 text-sm"
+                    : "rs-msg-in bg-muted text-foreground max-w-[90%] rounded-lg px-3 py-2 text-sm leading-relaxed"
                 }
               >
                 {m.text}
@@ -83,7 +83,7 @@ export function RoadSenseAssistant() {
                   key={q}
                   type="button"
                   onClick={() => ask(q)}
-                  className="border-border text-foreground hover:bg-muted focus-visible:ring-ring rounded-full border px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:outline-none"
+                  className="border-border text-foreground hover:bg-muted hover:border-primary/40 transition-colors duration-150 focus-visible:ring-ring rounded-full border px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:outline-none"
                 >
                   {q}
                 </button>

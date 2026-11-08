@@ -53,6 +53,7 @@ export default function AccidentMap({
             fillColor: "var(--severity-fatal)",
             fillOpacity: Math.min(0.08 + s.count * 0.006, 0.18),
             interactive: false,
+            className: "rs-hotspot-pulse",
           }}
         />
       ))}

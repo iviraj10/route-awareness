@@ -1,3 +1,4 @@
+import { reducedMotion } from "@/lib/reduced-motion";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   CartesianGrid,
@@ -125,7 +126,7 @@ function Dashboard() {
                   type="monotone"
                   dataKey="count"
                   name="Accidents"
-                  isAnimationActive={false}
+                  isAnimationActive={!reducedMotion} animationDuration={350}
                   stroke="var(--color-chart-1)"
                   strokeWidth={2}
                   dot={(props) => {

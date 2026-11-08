@@ -1,3 +1,4 @@
+import { reducedMotion } from "@/lib/reduced-motion";
 import { useState } from "react";
 import {
   Bar,
@@ -47,7 +48,7 @@ function YearSelect({ label, value, other, onChange }: { label: string; value: n
 
 function CompareCard({ title, yearA, yearB, a, b, change }: { title: string; yearA: number; yearB: number; a: string; b: string; change?: { diff: string; pct: string } }) {
   return (
-    <div className="border-border rounded-lg border p-4">
+    <div className="rs-lift border-border rounded-lg border p-4">
       <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">{title}</p>
       <dl className="mt-2 grid grid-cols-2 gap-2 text-sm">
         <div><dt className="text-muted-foreground text-xs">{yearA}</dt><dd className="font-mono font-semibold break-words">{a}</dd></div>
@@ -137,8 +138,8 @@ export function YearComparison() {
                   <YAxis {...axis} allowDecimals={false} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey={String(yearA)} name={`${yearA}`} fill={COLOR_A} isAnimationActive={false} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey={String(yearB)} name={`${yearB}`} fill={COLOR_B} isAnimationActive={false} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey={String(yearA)} name={`${yearA}`} fill={COLOR_A} isAnimationActive={!reducedMotion} animationDuration={350} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey={String(yearB)} name={`${yearB}`} fill={COLOR_B} isAnimationActive={!reducedMotion} animationDuration={350} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -153,8 +154,8 @@ export function YearComparison() {
                   <YAxis type="category" dataKey="name" width={120} {...axis} />
                   <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey={String(yearA)} name={`${yearA}`} fill={COLOR_A} isAnimationActive={false} barSize={9} />
-                  <Bar dataKey={String(yearB)} name={`${yearB}`} fill={COLOR_B} isAnimationActive={false} barSize={9} />
+                  <Bar dataKey={String(yearA)} name={`${yearA}`} fill={COLOR_A} isAnimationActive={!reducedMotion} animationDuration={350} barSize={9} />
+                  <Bar dataKey={String(yearB)} name={`${yearB}`} fill={COLOR_B} isAnimationActive={!reducedMotion} animationDuration={350} barSize={9} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
